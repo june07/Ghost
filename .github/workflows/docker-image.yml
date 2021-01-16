@@ -43,11 +43,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ env.tag }}
       
       - name: Push to GitHub Packages
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
-          repository: june07/ghost/${{ env.tag }}
-          tag_with_ref: true
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+          docker push june07/ghost/${{ env.tag }}
+          
