@@ -18,6 +18,9 @@ jobs:
       - name: Set env
         run: |
           echo "tag=ghost-largesse:$(date +%s)" >> $GITHUB_ENV
+      
+      - name: test
+        run: echo {{ $env.tag }}
           
 # until https://github.com/actions/download-artifact/issues/3 is resolved, the build process must be repeated
 #      - name: Download release files
