@@ -1,10 +1,8 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  release:
+    types: [ published ]
 
 jobs:
 
@@ -14,5 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Download release files
+    - uses: actions/download-artifact@v2
+      with:
+        name: ghost-latest
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ghost-largesse:$(date +%s)
