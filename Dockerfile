@@ -10,4 +10,4 @@ RUN npm i --only=production --verbose
 
 EXPOSE 2368
 
-CMD [ "npm", "run", "start" ]
+CMD [ "node", "current/index.js" ]
