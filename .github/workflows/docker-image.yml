@@ -45,5 +45,5 @@ jobs:
       - name: Push to GitHub Packages
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-          docker push june07/ghost/${{ env.tag }}
+          docker push docker.pkg.github.com:${{ env.tag }}
           
