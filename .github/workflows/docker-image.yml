@@ -52,6 +52,6 @@ jobs:
       
       - name: Push to GitHub Packages
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
+          echo ${{ secrets.CR_PAT }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
           docker push ${{ env.tag }}
           
