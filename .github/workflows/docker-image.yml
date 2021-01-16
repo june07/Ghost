@@ -63,5 +63,5 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.SSH_KEY }}"
-          ssh ${{ secrets.SSH_HOST }} -l ${{ secrets.SSH_USER }} -i ${{ secrets.SSH_KEY }}
+          ssh ${{ secrets.SSH_HOST }} -l ${{ secrets.SSH_USER }}
           
