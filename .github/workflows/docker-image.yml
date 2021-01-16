@@ -55,3 +55,7 @@ jobs:
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
           docker push ${{ env.tag }}
           
+      - name: Deploy
+        run: |
+          ssh ${{ secrets.SSH_HOST }} -l ${{ secrets.SSH_USER }} -i ${{ secrets.SSH_KEY }}
+          
