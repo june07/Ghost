@@ -14,6 +14,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      tag: ghost-largesse:$(date +%s)
+
     steps:
 # until https://github.com/actions/download-artifact/issues/3 is resolved, the build process must be repeated
 #      - name: Download release files
@@ -34,4 +37,13 @@ jobs:
       - run: grunt release --skip-tests
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ghost-largesse:$(date +%s)
+        run: docker build . --file Dockerfile --tag ${{tag}}
+      
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: june07/Ghost/${{tag}}
+          tag_with_ref: true
