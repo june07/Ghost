@@ -36,7 +36,14 @@ const WEBHOOKS = [
     'post.tag.attached',
     'post.tag.detached',
     'page.tag.attached',
-    'page.tag.detached'
+    'page.tag.detached',
+
+    'user.deactivated',
+    'user.deleted',
+    'user.added',
+    'user.activated',
+    'user.activated.edited',
+    'user.edited'
 ];
 
 const listen = () => {

@@ -120,7 +120,9 @@ const configureGrunt = function (grunt) {
             },
 
             dev: {
-                options: {}
+                options: {
+                    debug: true
+                }
             },
             test: {
                 options: {

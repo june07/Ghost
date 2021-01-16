@@ -54,3 +54,6 @@ package-lock.json
 content/themes/casper/config.*.json
 config.*.json
 !core/server/config/env/**
+Dockerfile
+docker-compose.yml
+Gruntfile.js

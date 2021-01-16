@@ -1,0 +1,25 @@
+version: "3.8"
+
+networks:
+  ghost-network:
+    driver: overlay
+
+services:
+  ghost:
+    build: .
+    restart: always
+    ports:
+      - target: 2368
+        published: 2368
+        protocol: tcp
+        mode: ingress
+    networks:
+      - ghost-network
+    environment:
+      NODE_ENV: development
+      mail__transport: SMTP
+      mail__options__host: "0.0.0.0"
+      mail__options__port: 1025
+      database__client: sqlite3
+    deploy:
+      replicas: 1
