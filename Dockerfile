@@ -8,6 +8,6 @@ COPY .build/release/ .
 
 RUN npm i --only=production --verbose
 
-EXPOSE 8080
+EXPOSE 2368
 
 CMD [ "npm", "run", "start" ]
