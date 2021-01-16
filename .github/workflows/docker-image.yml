@@ -20,7 +20,7 @@ jobs:
           echo "tag=ghost-largesse:$(date +%s)" >> $GITHUB_ENV
       
       - name: test
-        run: echo {{ $env.tag }}
+        run: echo ${{ env.tag }}
           
 # until https://github.com/actions/download-artifact/issues/3 is resolved, the build process must be repeated
 #      - name: Download release files
@@ -41,7 +41,7 @@ jobs:
       - run: grunt release --skip-tests
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag $tag
+        run: docker build . --file Dockerfile --tag ${{ env.tag }}
       
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
@@ -49,5 +49,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: june07/Ghost/$tag
+          repository: june07/Ghost/${{ env.tag }}
           tag_with_ref: true
