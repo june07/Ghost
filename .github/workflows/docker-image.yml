@@ -37,7 +37,7 @@ jobs:
       - run: grunt release --skip-tests
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{tag}}
+        run: docker build . --file Dockerfile --tag ${{ jobs.build.env.tag }}
       
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
@@ -45,5 +45,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: june07/Ghost/${{tag}}
+          repository: june07/Ghost/${{ jobs.build.env.tag }}
           tag_with_ref: true
