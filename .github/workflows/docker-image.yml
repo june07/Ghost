@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Set env
         run: |
-          echo "tag=ghost-largesse:$(date +%s)" >> $GITHUB_ENV
+          echo "tag=docker.pkg.github.com/june07/ghost/ghost-largesse:$(date +%s)" >> $GITHUB_ENV
       
       - name: test
         run: echo ${{ env.tag }}
@@ -45,5 +45,5 @@ jobs:
       - name: Push to GitHub Packages
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username ${{ github.actor }} --password-stdin
-          docker push docker.pkg.github.com/june07/ghost/${{ env.tag }}
+          docker push ${{ env.tag }}
           
