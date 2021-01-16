@@ -15,13 +15,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+# until https://github.com/actions/download-artifact/issues/3 is resolved, the build process must be repeated
+#      - name: Download release files
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: ghost-latest
 
-      - name: Download release files
-        uses: actions/download-artifact@v2
+      - name: Checkout
+        uses: actions/checkout@v2        
         with:
-          name: ghost-latest
+          fetch-depth: 0
+          submodules: true
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.18.0'
+
+      - run: yarn
+      - run: grunt release --skip-tests
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag ghost-largesse:$(date +%s)
