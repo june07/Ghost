@@ -27,7 +27,8 @@ const notImplemented = function (req, res, next) {
         members: ['GET', 'PUT', 'DELETE', 'POST'],
         config: ['GET'],
         schedules: ['PUT'],
-        db: ['POST']
+        db: ['POST'],
+        invites: ['GET', 'POST', 'DELETE', 'POST']
     };
 
     const match = req.url.match(/^\/(\w+)\/?/);
