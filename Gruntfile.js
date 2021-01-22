@@ -118,10 +118,10 @@ const configureGrunt = function (grunt) {
                 script: 'index.js',
                 output: 'Ghost is running'
             },
-
             dev: {
                 options: {
-                    debug: true
+                    debug: 0,
+                    //breakOnFirstLine: true
                 }
             },
             test: {
