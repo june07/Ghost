@@ -77,7 +77,8 @@ Invite = ghostBookshelf.Model.extend({
                 if (_.some(loadedPermissions.user.roles, {name: 'Owner'}) ||
                     _.some(loadedPermissions.user.roles, {name: 'Administrator'})) {
                     allowed = ['Administrator', 'Editor', 'Author', 'Contributor'];
-                } else if (_.some(loadedPermissions.user.roles, {name: 'Editor'})) {
+                } else if (_.some(loadedPermissions.user.roles, {name: 'Editor'}) ||
+                    _.some(loadedPermissions.apikey.roles, {name: 'Admin Integration'})) {
                     allowed = ['Author', 'Contributor'];
                 }
 
