@@ -113,8 +113,8 @@ module.exports = {
                 invites: frame.data.invites,
                 options: frame.options,
                 user: {
-                    name: frame.user.get('name'),
-                    email: frame.user.get('email')
+                    name: frame.user ? frame.user.get('name') : 'Integration',
+                    email: frame.user ? frame.user.get('email') : this.config.get('mail.from')
                 }
             });
         }
