@@ -114,7 +114,7 @@ module.exports = {
                 options: frame.options,
                 user: {
                     name: frame.user ? frame.user.get('name') : 'Integration',
-                    email: frame.user ? frame.user.get('email') : this.config.get('mail.from')
+                    email: frame.user ? frame.user.get('email') : api.config.read('mail.from')
                 }
             });
         }
