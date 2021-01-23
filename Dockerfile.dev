@@ -1,0 +1,15 @@
+FROM node:lts-buster
+
+RUN apt-get update -y
+RUN yarn global add knex-migrator grunt-cli ember-cli bower
+RUN mkdir -p /var/lib/ghost
+
+WORKDIR /var/lib/ghost
+
+COPY . /var/lib/ghost
+
+RUN yarn setup
+
+EXPOSE 2368
+
+CMD [ "grunt", "dev" ]

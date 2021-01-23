@@ -6,7 +6,9 @@ networks:
 
 services:
   ghost:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     restart: always
     ports:
       - target: 2368
@@ -16,10 +18,23 @@ services:
     networks:
       - ghost-network
     environment:
+      url: ${URL}
       NODE_ENV: development
       mail__transport: SMTP
-      mail__options__host: "0.0.0.0"
+      mail__options__host: mailhog
       mail__options__port: 1025
       database__client: sqlite3
+    deploy:
+      replicas: 1
+    volumes:
+      - ./content:/var/lib/ghost/content
+      - ./core:/var/lib/ghost/core
+  
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025
+    networks:
+      - ghost-network
     deploy:
       replicas: 1
