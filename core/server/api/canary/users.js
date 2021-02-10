@@ -94,6 +94,37 @@ module.exports = {
         }
     },
 
+    add: {
+        statusCode: 201,
+        headers: {},
+        options: [
+            'include',
+            'fields'
+        ],
+        validation: {
+            options: {
+                include: {
+                    values: ALLOWED_INCLUDES
+                }
+            }
+        },
+        permissions: {
+            unsafeAttrs: UNSAFE_ATTRS
+        },
+        async query(frame) {
+            let value = await userService.addUser(frame)
+                .then(model => {
+                    return model;
+                })
+                .catch((err) => {
+                    return Promise.reject(new errors.NoPermissionError({
+                        err: err
+                    }));
+                });
+            return value;
+        }
+    },
+
     edit: {
         headers: {},
         options: [

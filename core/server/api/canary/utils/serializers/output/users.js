@@ -12,6 +12,14 @@ module.exports = {
         };
     },
 
+    add(model, apiConfig, frame) {
+        debug('add');
+
+        frame.response = {
+            users: [mapper.mapUser(model, frame)]
+        };
+    },
+    
     read(model, apiConfig, frame) {
         debug('read');
 

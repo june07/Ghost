@@ -59,6 +59,17 @@ class Users {
                 .then(() => filename);
         });
     }
+
+    addUser(frame) {
+        let user = frame.data.users[0]
+
+        return this.models.User.add({
+            email: user.email,
+            name: user.name,
+            password: user.password,
+            roles: [user.role_id]
+        }, frame.options);
+    }
 }
 
 module.exports = Users;

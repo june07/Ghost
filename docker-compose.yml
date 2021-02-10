@@ -6,11 +6,17 @@ networks:
 
 services:
   ghost:
+    image: node:lts
+    working_dir: /var/lib/ghost
     build:
       context: .
       dockerfile: Dockerfile.dev
     restart: always
     ports:
+      - target: 9229
+        published: 9235
+        protocol: tcp
+        mode: ingress
       - target: 2368
         published: 2368
         protocol: tcp
@@ -18,7 +24,9 @@ services:
     networks:
       - ghost-network
     environment:
+      PATH: /var/lib/ghost/node_modules/.bin:${PATH}
       url: ${URL}
+      server__host: 0.0.0.0
       NODE_ENV: development
       mail__transport: SMTP
       mail__options__host: mailhog
@@ -27,13 +35,14 @@ services:
     deploy:
       replicas: 1
     volumes:
-      - ./content:/var/lib/ghost/content
-      - ./core:/var/lib/ghost/core
+      - .:/var/lib/ghost
+    entrypoint:
+      ["grunt", "dev"]
   
   mailhog:
     image: mailhog/mailhog
     ports:
-      - 8025
+      - 8025:8025
     networks:
       - ghost-network
     deploy:

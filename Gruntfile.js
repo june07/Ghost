@@ -120,7 +120,7 @@ const configureGrunt = function (grunt) {
             },
             dev: {
                 options: {
-                    debug: 0,
+                    debug: '0.0.0.0',
                     //breakOnFirstLine: true
                 }
             },

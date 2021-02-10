@@ -66,6 +66,7 @@ module.exports = function apiRoutes() {
     router.del('/settings/stripe/connect', mw.authAdminApi, http(apiCanary.settings.disconnectStripeConnectIntegration));
 
     // ## Users
+    router.post('/users', mw.authAdminApi, http(apiCanary.users.add));
     router.get('/users', mw.authAdminApi, http(apiCanary.users.browse));
     router.get('/users/:id', mw.authAdminApi, http(apiCanary.users.read));
     router.get('/users/slug/:slug', mw.authAdminApi, http(apiCanary.users.read));
