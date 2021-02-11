@@ -119,7 +119,7 @@ describe('Settings API (canary)', function () {
                 });
         });
 
-        it('Can request settings by type', function () {
+        it('Ignores the deprecated type filter', function () {
             return request.get(localUtils.API.getApiQuery(`settings/?type=theme`))
                 .set('Origin', config.get('url'))
                 .expect('Content-Type', /json/)
@@ -134,11 +134,13 @@ describe('Settings API (canary)', function () {
 
                     jsonResponse.settings.should.be.an.Object();
                     const settings = jsonResponse.settings;
-
-                    Object.keys(settings).length.should.equal(1);
-                    settings[0].key.should.equal('active_theme');
-                    settings[0].value.should.equal('casper');
-                    settings[0].type.should.equal('theme');
+                    // Returns all settings
+                    should.equal(settings.length, defaultSettingsKeyTypes.length);
+                    for (const defaultSetting of defaultSettingsKeyTypes) {
+                        should.exist(settings.find((setting) => {
+                            return setting.key === defaultSetting.key && setting.type === defaultSetting.type;
+                        }), `Expected to find a setting with key ${defaultSetting.key} and type ${defaultSetting.type}`);
+                    }
 
                     localUtils.API.checkResponse(jsonResponse, 'settings');
                 });
@@ -164,53 +166,6 @@ describe('Settings API (canary)', function () {
                     settings[0].key.should.equal('active_theme');
                     settings[0].value.should.equal('casper');
                     settings[0].type.should.equal('theme');
-
-                    localUtils.API.checkResponse(jsonResponse, 'settings');
-                });
-        });
-
-        it('Can request settings by group and by deprecated type', function () {
-            return request.get(localUtils.API.getApiQuery(`settings/?group=theme&type=private`))
-                .set('Origin', config.get('url'))
-                .expect('Content-Type', /json/)
-                .expect('Cache-Control', testUtils.cacheRules.private)
-                .expect(200)
-                .then((res) => {
-                    should.not.exist(res.headers['x-cache-invalidate']);
-
-                    const jsonResponse = res.body;
-                    should.exist(jsonResponse.settings);
-                    should.exist(jsonResponse.meta);
-
-                    jsonResponse.settings.should.be.an.Object();
-                    const settings = jsonResponse.settings;
-
-                    Object.keys(settings).length.should.equal(4);
-                    settings[0].key.should.equal('active_theme');
-                    settings[0].value.should.equal('casper');
-                    settings[0].type.should.equal('theme');
-
-                    localUtils.API.checkResponse(jsonResponse, 'settings');
-                });
-        });
-
-        it('Requesting core settings type returns no results', function () {
-            return request.get(localUtils.API.getApiQuery(`settings/?type=core`))
-                .set('Origin', config.get('url'))
-                .expect('Content-Type', /json/)
-                .expect('Cache-Control', testUtils.cacheRules.private)
-                .expect(200)
-                .then((res) => {
-                    should.not.exist(res.headers['x-cache-invalidate']);
-
-                    const jsonResponse = res.body;
-                    should.exist(jsonResponse.settings);
-                    should.exist(jsonResponse.meta);
-
-                    jsonResponse.settings.should.be.an.Object();
-                    const settings = jsonResponse.settings;
-
-                    Object.keys(settings).length.should.equal(0);
 
                     localUtils.API.checkResponse(jsonResponse, 'settings');
                 });
@@ -408,43 +363,6 @@ describe('Settings API (canary)', function () {
                 });
         });
 
-        it('can toggle member setting', function () {
-            return request.get(localUtils.API.getApiQuery('settings/'))
-                .set('Origin', config.get('url'))
-                .expect('Content-Type', /json/)
-                .expect('Cache-Control', testUtils.cacheRules.private)
-                .then(function (res) {
-                    const jsonResponse = res.body;
-
-                    const settingToChange = {
-                        settings: [
-                            {
-                                key: 'labs',
-                                value: '{"subscribers":false,"members":false}'
-                            }
-                        ]
-                    };
-
-                    should.exist(jsonResponse);
-                    should.exist(jsonResponse.settings);
-
-                    return request.put(localUtils.API.getApiQuery('settings/'))
-                        .set('Origin', config.get('url'))
-                        .send(settingToChange)
-                        .expect('Content-Type', /json/)
-                        .expect('Cache-Control', testUtils.cacheRules.private)
-                        .expect(200)
-                        .then(function ({body, headers}) {
-                            const putBody = body;
-                            headers['x-cache-invalidate'].should.eql('/*');
-                            should.exist(putBody);
-
-                            putBody.settings[0].key.should.eql('labs');
-                            putBody.settings[0].value.should.eql(JSON.stringify({subscribers: false, members: false}));
-                        });
-                });
-        });
-
         it('can\'t edit permalinks', function (done) {
             const settingToChange = {
                 settings: [{key: 'permalinks', value: '/:primary_author/:slug/'}]
@@ -564,31 +482,6 @@ describe('Settings API (canary)', function () {
 
                     // by default we login with the owner
                     return localUtils.doAuth(request);
-                });
-        });
-
-        it('cannot toggle member setting', function (done) {
-            const settingToChange = {
-                settings: [
-                    {
-                        key: 'labs',
-                        value: '{"subscribers":false,"members":true}'
-                    }
-                ]
-            };
-
-            request.put(localUtils.API.getApiQuery('settings/'))
-                .set('Origin', config.get('url'))
-                .send(settingToChange)
-                .expect('Content-Type', /json/)
-                .expect('Cache-Control', testUtils.cacheRules.private)
-                .expect(403)
-                .end(function (err, res) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    done();
                 });
         });
     });
