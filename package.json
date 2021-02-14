@@ -21,6 +21,7 @@
   "license": "MIT",
   "main": "./core/index",
   "scripts": {
+    "docker:dev": "docker-compose --env-file .env.dev up",
     "start": "node index",
     "dev": "DEBUG=* grunt dev",
     "test": "grunt validate",

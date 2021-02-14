@@ -26,6 +26,7 @@ services:
     environment:
       PATH: /var/lib/ghost/node_modules/.bin:${PATH}
       url: ${URL}
+      admin__url: ${ADMIN_URL}
       server__host: 0.0.0.0
       NODE_ENV: development
       mail__transport: SMTP

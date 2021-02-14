@@ -118,6 +118,7 @@ const configureGrunt = function (grunt) {
             dev: {
                 options: {
                     debug: '0.0.0.0',
+                    hardStop: true
                     //breakOnFirstLine: true
                 }
             },
