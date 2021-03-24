@@ -31,8 +31,12 @@ class MembersConfigProvider {
      * @private
      */
     _getDomain() {
-        const domain = this._urlUtils.urlFor('home', true).match(new RegExp('^https?://([^/:?#]+)(?:[/:?#]|$)', 'i'));
-        return domain && domain[1];
+        const url = this._urlUtils.urlFor('home', true).match(new RegExp('^https?://([^/:?#]+)(?:[/:?#]|$)', 'i'));
+        const domain = (url && url[1]) || '';
+        if (domain.startsWith('www.')) {
+            return domain.replace(/^(www)\.(?=[^/]*\..{2,5})/, '');
+        }
+        return domain;
     }
 
     getEmailFromAddress() {
@@ -60,20 +64,10 @@ class MembersConfigProvider {
     }
 
     getPublicPlans() {
-        const CURRENCY_SYMBOLS = {
-            USD: '$',
-            AUD: '$',
-            CAD: '$',
-            GBP: '£',
-            EUR: '€',
-            INR: '₹'
-        };
-
         const defaultPriceData = {
             monthly: 0,
             yearly: 0,
-            currency: 'USD',
-            currency_symbol: CURRENCY_SYMBOLS.USD
+            currency: 'USD'
         };
 
         try {
@@ -88,7 +82,6 @@ class MembersConfigProvider {
             }, {});
 
             priceData.currency = plans[0].currency || 'USD';
-            priceData.currency_symbol = CURRENCY_SYMBOLS[priceData.currency.toUpperCase()];
 
             if (Number.isInteger(priceData.monthly) && Number.isInteger(priceData.yearly)) {
                 return priceData;
@@ -227,7 +220,7 @@ class MembersConfigProvider {
 
     getTokenConfig() {
         const {href: membersApiUrl} = new URL(
-            this._urlUtils.getApiPath({version: 'v3', type: 'members'}),
+            this._urlUtils.getApiPath({version: 'v4', type: 'members'}),
             this._urlUtils.urlFor('admin', true)
         );
 
