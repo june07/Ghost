@@ -21,6 +21,10 @@ services:
         published: 2368
         protocol: tcp
         mode: ingress
+      - target: 4200
+        published: 4200
+        protocol: tcp
+        mode: ingress
     networks:
       - ghost-network
     environment:
