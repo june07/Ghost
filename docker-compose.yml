@@ -36,7 +36,11 @@ services:
       mail__transport: SMTP
       mail__options__host: mailhog
       mail__options__port: 1025
-      database__client: sqlite3
+      database__client: mysql
+      database__connection__host: 138.68.247.236
+      database__connection__user: admin_dev_ghost_largesse
+      database__connection__password: keet5TooCh1OoWah3thi1oongaodoo
+      database__connection__database: dev_ghost_largesse
     deploy:
       replicas: 1
     volumes:
